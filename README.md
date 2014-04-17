@@ -9,6 +9,14 @@ This is a copy from <http://www.frykholm.se/files/markdown.lua> with some change
         md.markdown(txt)
 
 
+## Tests
 
-License: MIT like license, see the source file for details.
+Run the testsuite with
+
+    lua markdown-tests.lua
+
+with Lua 5.1 or 5.2.
+
+## License
+MIT like license, see the source file for details.
 
