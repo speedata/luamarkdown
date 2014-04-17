@@ -1,22 +1,18 @@
 local markdown = require "markdown"
 
--- http://stackoverflow.com/a/14554565
-if not setfenv then -- Lua 5.2
-  -- based on http://lua-users.org/lists/lua-l/2010-06/msg00314.html
-  -- this assumes f is a function
-  local function findenv(f)
-    local level = 1
+setfenv = setfenv or function(f, t)
+    f = (type(f) == 'function' and f or debug.getinfo(f + 1, 'f').func)
+    local name
+    local up = 0
     repeat
-      local name, value = debug.getupvalue(f, level)
-      if name == '_ENV' then return level, value end
-      level = level + 1
-    until name == nil
-    return nil end
-  getfenv = function (f) return(select(2, findenv(f)) or _G) end
-  setfenv = function (f, t)
-    local level = findenv(f)
-    if level then debug.setupvalue(f, level, t) end
-    return f end
+        up = up + 1
+        name = debug.getupvalue(f, up)
+    until name == '_ENV' or name == nil
+    if name then
+
+debug.upvaluejoin(f, up, function() return t end, 1) -- use unique upvalue, set it to f
+
+    end
 end
 
 -- Splits the text into an array of separate lines.
@@ -4424,10 +4420,10 @@ local function run_tests()
 	-- Do any <pre></pre> sequences in s1 and s2 match up perfectly?
 	local function pre_equal(s1, s2)
 		local pre = {}
-		for p in s1:gfind("<pre>.-</pre>") do
+		for p in s1:gmatch("<pre>.-</pre>") do
 			pre[#pre+1] = p
 		end
-		for p in s2:gfind("<pre>.-</pre>") do
+		for p in s2:gmatch("<pre>.-</pre>") do
 			if p ~= pre[1] then return false end
 			table.remove(pre, 1)
 		end
