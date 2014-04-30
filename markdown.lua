@@ -6,7 +6,7 @@
 **Author:** Niklas Frykholm, <niklas@frykholm.se>
 **Date:** 31 May 2008
 
-See the folloging page for changes to the original file
+See the following page for changes to the original file
 https://github.com/speedata/luamarkdown
 
 
